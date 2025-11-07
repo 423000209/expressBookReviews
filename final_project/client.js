@@ -47,7 +47,7 @@ function searchByTitle(title) {
     .catch(error => { throw new Error(error.response?.data?.message || 'Title not found'); });
 }
 
-// Example usage with promises
+
 searchByTitle('First Book')
   .then(books => console.log('Books by Title:', books))
   .catch(err => console.error('Error:', err.message));
