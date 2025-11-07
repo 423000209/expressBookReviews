@@ -29,14 +29,14 @@ app.use(session({
 let books = [
   { isbn: '1111111111', title: 'First Book', author: 'First Author', reviews: ["Great"] },
   { isbn: '2222222222', title: 'Second Book', author: 'Second Author', reviews: ["Good"] },
-  // Add more books as needed
+
 ];
 
-// In-memory user storage (simulate DB)
+
 let users = [];
 let reviewIdCounter = 1;
 
-// Middleware for JWT authentication
+
 const authenticateToken = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'Access token required' });
@@ -48,31 +48,31 @@ const authenticateToken = (req, res, next) => {
 };
 
 
-// Task 1: Get the book list available in the shop - 2 Points
+
 app.get('/books', (req, res) => {
   res.json(books);
 });
 
-// Task 2: Get the books based on ISBN - 2 Points
+
 app.get('/books/isbn/:isbn', (req, res) => {
   const book = books.find(b => b.isbn === req.params.isbn);
   if (!book) return res.status(404).json({ message: 'Book not found' });
   res.json(book);
 });
 
-// Task 3: Get all books by Author - 2 Points
+
 app.get('/books/author/:author', (req, res) => {
   const filteredBooks = books.filter(b => b.author.toLowerCase().includes(req.params.author.toLowerCase()));
   res.json(filteredBooks);
 });
 
-// Task 4: Get all books based on Title - 2 Points
+
 app.get('/books/title/:title', (req, res) => {
   const filteredBooks = books.filter(b => b.title.toLowerCase().includes(req.params.title.toLowerCase()));
   res.json(filteredBooks);
 });
 
-// Task 5: Get book Review - 2 Points
+
 app.get('/books/:isbn/reviews', (req, res) => {
   const book = books.find(b => b.isbn === req.params.isbn);
   if (!book) return res.status(404).json({ message: 'Book not found' });
@@ -81,7 +81,7 @@ app.get('/books/:isbn/reviews', (req, res) => {
 
 
 
-// Task 6: Register New user – 3 Points
+
 app.post('/users/register', async (req, res) => {
   const { username, password } = req.body;
   if (users.find(u => u.username === username)) return res.status(400).json({ message: 'User already exists' });
@@ -90,7 +90,7 @@ app.post('/users/register', async (req, res) => {
   res.status(201).json({ message: 'User registered' });
 });
 
-// Task 7: Login as a Registered user - 3 Points
+
 app.post('/users/login', async (req, res) => {
   const { username, password } = req.body;
   const user = users.find(u => u.username === username);
@@ -101,7 +101,7 @@ app.post('/users/login', async (req, res) => {
 });
 
 
-// Task 8: Add/Modify a book review - 2 Points
+
 app.post('/books/:isbn/reviews', authenticateToken, (req, res) => {
   const book = books.find(b => b.isbn === req.params.isbn);
   if (!book) return res.status(404).json({ message: 'Book not found' });
@@ -119,7 +119,7 @@ app.put('/books/:isbn/reviews/:reviewId', authenticateToken, (req, res) => {
   res.json(review);
 });
 
-// Task 9: Delete book review added by that particular user - 2 Points
+
 app.delete('/books/:isbn/reviews/:reviewId', authenticateToken, (req, res) => {
   const book = books.find(b => b.isbn === req.params.isbn);
   if (!book) return res.status(404).json({ message: 'Book not found' });
@@ -135,7 +135,7 @@ app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)
 
   const BASE_URL = 'http://localhost:5000';
 
-  // Task 10: Get all books – Using async callback function – 2 Points
+
   function getAllBooks(callback) {
     axios.get(`${BASE_URL}/books`)
       .then(response => callback(null, response.data))
@@ -147,7 +147,7 @@ app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)
     else console.log('All Books:', books);
   });
 
-  // Task 11: Search by ISBN – Using Promises – 2 Points
+ 
   function searchByISBN(isbn) {
     return axios.get(`${BASE_URL}/books/isbn/${isbn}`)
       .then(response => response.data)
@@ -158,7 +158,7 @@ app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)
     .then(book => console.log('Book by ISBN:', book))
     .catch(err => console.error('Error:', err.message));
 
-  // Task 12: Search by Author – Using async/await – 2 Points
+
   async function searchByAuthor(author) {
     try {
       const response = await axios.get(`${BASE_URL}/books/author/${author}`);
@@ -170,7 +170,7 @@ app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)
 
   searchByAuthor('First Author');
 
-  // Task 13: Search by Title – Using Promises – 2 Points
+
   function searchByTitle(title) {
     return axios.get(`${BASE_URL}/books/title/${title}`)
       .then(response => response.data)
